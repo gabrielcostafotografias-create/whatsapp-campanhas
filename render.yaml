@@ -9,11 +9,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: APP_DOMAIN
-        fromDatabase:
-          name: postgres
-          property: host
+        value: whatsapp-campanhas-web.onrender.com
       - key: API_DOMAIN
-        value: ${RENDER_EXTERNAL_HOSTNAME}
+        value: whatsapp-campanhas-api.onrender.com
     autoDeploy: true
     repo: https://github.com/gabrielcostafotografias-create/whatsapp-campanhas
 
@@ -35,6 +33,7 @@ services:
       - key: REDIS_URL
         fromService:
           name: redis
+          type: pserv
           property: connectionString
       - key: META_APP_ID
         sync: false
@@ -67,6 +66,7 @@ services:
       - key: REDIS_URL
         fromService:
           name: redis
+          type: pserv
           property: connectionString
       - key: META_APP_ID
         sync: false
@@ -103,5 +103,5 @@ envVarGroups:
         sync: false
 
 # Documentação: https://render.com/docs/infrastructure-as-code
-# Plan free: 750 horas/mês, máximo 1 Web + 1 Worker
+# Plan free: 750 horas/mês
 # PostgreSQL e Redis: Render escolhe versão compatível automaticamente
