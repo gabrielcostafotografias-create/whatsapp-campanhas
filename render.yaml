@@ -1,0 +1,108 @@
+services:
+  - type: web
+    name: whatsapp-campanhas-web
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_DOMAIN
+        fromDatabase:
+          name: postgres
+          property: host
+      - key: API_DOMAIN
+        value: ${RENDER_EXTERNAL_HOSTNAME}
+    autoDeploy: true
+    repo: https://github.com/gabrielcostafotografias-create/whatsapp-campanhas
+
+  - type: web
+    name: whatsapp-campanhas-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start -- --port 5000
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: redis
+          property: connectionString
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_BUSINESS_ACCOUNT_ID
+        sync: false
+      - key: META_PHONE_NUMBER_ID
+        sync: false
+      - key: META_WEBHOOK_TOKEN
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+    autoDeploy: true
+    repo: https://github.com/gabrielcostafotografias-create/whatsapp-campanhas
+
+  - type: worker
+    name: whatsapp-campanhas-worker
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run worker
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: redis
+          property: connectionString
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_BUSINESS_ACCOUNT_ID
+        sync: false
+      - key: META_PHONE_NUMBER_ID
+        sync: false
+    autoDeploy: true
+    repo: https://github.com/gabrielcostafotografias-create/whatsapp-campanhas
+
+databases:
+  - name: postgres
+    databaseName: campanhas_db
+    user: campanhas_user
+    plan: free
+    version: "14"
+
+  - name: redis
+    plan: free
+    version: "7"
+
+envVarGroups:
+  - name: meta_credentials
+    envVars:
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: META_BUSINESS_ACCOUNT_ID
+        sync: false
+      - key: META_PHONE_NUMBER_ID
+        sync: false
+      - key: META_WEBHOOK_TOKEN
+        sync: false
+
+# Documentação: https://render.com/docs/infrastructure-as-code
+# Plan free: 750 horas/mês, máximo 1 Web + 1 Worker
