@@ -30,11 +30,6 @@ services:
         fromDatabase:
           name: postgres
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: redis
-          type: pserv
-          property: connectionString
       - key: META_APP_ID
         sync: false
       - key: META_APP_SECRET
@@ -63,11 +58,6 @@ services:
         fromDatabase:
           name: postgres
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: redis
-          type: pserv
-          property: connectionString
       - key: META_APP_ID
         sync: false
       - key: META_APP_SECRET
@@ -85,23 +75,7 @@ databases:
     user: campanhas_user
     plan: free
 
-  - name: redis
-    plan: free
-
-envVarGroups:
-  - name: meta_credentials
-    envVars:
-      - key: META_APP_ID
-        sync: false
-      - key: META_APP_SECRET
-        sync: false
-      - key: META_BUSINESS_ACCOUNT_ID
-        sync: false
-      - key: META_PHONE_NUMBER_ID
-        sync: false
-      - key: META_WEBHOOK_TOKEN
-        sync: false
-
 # Documentação: https://render.com/docs/infrastructure-as-code
 # Plan free: 750 horas/mês
-# PostgreSQL e Redis: Render escolhe versão compatível automaticamente
+# Nota: Redis removido (não suportado no free tier)
+# Use PostgreSQL para cache/fila ou migre para plan paid
