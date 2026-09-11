@@ -84,11 +84,9 @@ databases:
     databaseName: campanhas_db
     user: campanhas_user
     plan: free
-    version: "14"
 
   - name: redis
     plan: free
-    version: "7"
 
 envVarGroups:
   - name: meta_credentials
@@ -106,3 +104,4 @@ envVarGroups:
 
 # Documentação: https://render.com/docs/infrastructure-as-code
 # Plan free: 750 horas/mês, máximo 1 Web + 1 Worker
+# PostgreSQL e Redis: Render escolhe versão compatível automaticamente
